@@ -1,0 +1,43 @@
+local DIR="./"
+
+package.path="/home/yipf/?.lua;"..DIR.."/?.lua;"..package.path
+package.cpath="/usr/lib/lib?51.so;/usr/lib/lib?.so;"..package.cpath
+
+require "lua-common/ioio"
+
+clib_loader=function(cdef_filename,libpath,name)
+	libpath=libpath or string.gsub(cdef_filename,"^(.-)%.h$","%1%.so")
+	name=name or string.match(cdef_filename,"^.-([^/]*)%.([^%.]-)$")
+	print(string.format("Load modual %q from lib %q ...",name,libpath))
+	local str=file2str(cdef_filename) or ""
+	local ffi=require "ffi"
+	ffi.cdef(str)
+	print("Success!")
+	return ffi.load(libpath),ffi
+end
+
+API=clib_loader("clibs/yipf-img-gl.h")
+
+require '3D/registers'
+require 'utils/helpers'
+
+require 'UI/config'
+require 'UI/widgets'
+
+local load_scn=function(name,path)
+	path=path or DIR.."/scn"
+	local s=string.format([[%s/%s.lua]],path,name)
+	dofile(s)
+end
+
+--~ load_scn"debug-obj"
+--~ load_scn"debug-shape"
+--~ load_scn"debug-img"
+load_scn"VAT"
+--~ load_scn"test"
+
+--~ load_scn"debug-obj"
+
+--~ -- test files
+--~ require "math/sci-eval"
+
