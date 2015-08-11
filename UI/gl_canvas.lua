@@ -120,7 +120,7 @@ make_gl_canvas=function(scn,camera,w,h)
 			Update(o)
 		end,
 		motion_cb=function(o,x,y,status)
-			if isleft(status) then -- if left bottun down
+			if isright(status) then -- if left bottun down
 				local mx,my=unpack(mouse_xy)
 				if mx then
 					API.rotate_camera(camera,(mx-x)*0.01,(y-my)*0.01)
@@ -130,7 +130,7 @@ make_gl_canvas=function(scn,camera,w,h)
 				mouse_xy[1],mouse_xy[2]=x,y
 				return true
 			end
-			-- clear the mouse
+			-- otherwise, clear the mouse
 			mouse_xy[1]=nil
 		end,
 		button_cb=function(o,but, pressed, x, y, status)-- mouse button
